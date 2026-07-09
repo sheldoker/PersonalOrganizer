@@ -4,6 +4,10 @@ namespace PersonalOrganizer.Domain.Entities
 {
     public class Note
     {
+        private readonly List<Tag> _tags = new();
+
+        public IReadOnlyCollection<Tag> Tags => _tags.AsReadOnly();
+
         public int Id { get; private set; }
         public string Title { get; private set; }
         public string Text { get; private set; }
@@ -145,6 +149,44 @@ namespace PersonalOrganizer.Domain.Entities
             Category = category;
             UpdateTime();
         }
+
+        public void AddTag(Tag tag)
+        {
+            if (tag is null)
+            {
+                throw new ArgumentNullException(nameof(tag));
+            }
+
+            foreach (Tag currentTag in _tags)
+            {
+                if (currentTag == tag)
+                {
+                    return;
+                }
+            }
+
+            _tags.Add(tag);
+            UpdateTime();
+        }
+
+        public void RemoveTag(Tag tag)
+        {
+            if (tag is null)
+            {
+                throw new ArgumentNullException(nameof(tag));
+            }
+
+            foreach (Tag currentTag in _tags)
+            {
+                if (currentTag == tag)
+                {
+                    return;
+                }
+            }
+
+            _tags.Remove(tag);
+            UpdateTime();
+        }
     }
-}   
+}
 
