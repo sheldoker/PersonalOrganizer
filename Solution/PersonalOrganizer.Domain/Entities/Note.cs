@@ -12,8 +12,9 @@ namespace PersonalOrganizer.Domain.Entities
         public bool IsFavorite { get; private set; }
         public bool IsPinned { get; private set; }
         public bool IsArchived { get; private set; }
+        public Category Category { get; private set; }
 
-        public Note(string title, string text)
+        public Note(string title, string text, Category category)
         {
             if (string.IsNullOrWhiteSpace(title))
             {
@@ -25,12 +26,18 @@ namespace PersonalOrganizer.Domain.Entities
                 throw new ArgumentException("Текст не может быть пустым.", nameof(text));
             }
 
+            if (category is null)
+            {
+                throw new ArgumentNullException(nameof(category));
+            }
+
             Title = title;
             Text = text;
 
             var now = DateTime.Now;
             CreatedAt = now;
             UpdatedAt = now;
+            Category = category;
         }
 
         private void UpdateTime()
@@ -73,11 +80,11 @@ namespace PersonalOrganizer.Domain.Entities
 
         public void Unpin()
         {
-            if(!IsPinned)
+            if (!IsPinned)
             {
                 return;
             }
-            
+
             IsPinned = false;
             UpdateTime();
         }
@@ -120,6 +127,22 @@ namespace PersonalOrganizer.Domain.Entities
             }
 
             IsFavorite = false;
+            UpdateTime();
+        }
+
+        public void ChangeCategory(Category category)
+        {
+            if (category is null)
+            {
+                throw new ArgumentNullException(nameof(category));
+            }
+
+            if (Category == category)
+            {
+                return;
+            }
+
+            Category = category;
             UpdateTime();
         }
     }
