@@ -1,1 +1,6 @@
-<Solution />
+<Solution>
+  <Folder Name="/Элементы решения/">
+    <File Path=".gitignore" />
+  </Folder>
+  <Project Path="PersonalOrganizer.Domain/PersonalOrganizer.Domain.csproj" />
+</Solution>

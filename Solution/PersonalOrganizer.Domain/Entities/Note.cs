@@ -5,8 +5,10 @@ namespace PersonalOrganizer.Domain.Entities
     public class Note
     {
         private readonly List<Tag> _tags = new();
-
         public IReadOnlyCollection<Tag> Tags => _tags.AsReadOnly();
+
+        private readonly List<ToDo> _tasks = new();
+        public IReadOnlyCollection<ToDo> Tasks => _tasks.AsReadOnly();
 
         public int Id { get; private set; }
         public string Title { get; private set; }
@@ -157,6 +159,11 @@ namespace PersonalOrganizer.Domain.Entities
                 throw new ArgumentNullException(nameof(tag));
             }
 
+            if (_tags.Count >= 10)
+            {
+                throw new InvalidOperationException("Нельзя добавить больше 10 тегов.");
+            }
+
             foreach (Tag currentTag in _tags)
             {
                 if (currentTag == tag)
@@ -180,11 +187,69 @@ namespace PersonalOrganizer.Domain.Entities
             {
                 if (currentTag == tag)
                 {
+                    _tags.Remove(tag);
+                    UpdateTime();
+                    return;
+                }
+            }
+        }
+
+        public void ClearTags()
+        {
+            if (_tags.Count == 0)
+            {
+                return;
+            }
+
+            _tags.Clear();
+            UpdateTime();
+        }
+
+        public void AddTask(ToDo task)
+        {
+            if (task is null)
+            {
+                throw new ArgumentNullException(nameof(task));
+            }
+
+            foreach (ToDo currentTask in _tasks)
+            {
+                if (currentTask == task)
+                {
                     return;
                 }
             }
 
-            _tags.Remove(tag);
+            _tasks.Add(task);
+            UpdateTime();
+        }
+
+        public void RemoveTask(ToDo task)
+        {
+            if (task is null)
+            {
+                throw new ArgumentNullException(nameof(task));
+            }
+
+            foreach (ToDo currentTask in _tasks)
+            {
+                if (currentTask == task)
+                {
+                    _tasks.Remove(task);
+                    UpdateTime();
+                    return;
+                }
+            }
+        }
+
+        public void ClearTasks()
+        {
+            if (_tasks.Count == 0)
+            {
+                return;
+            }
+
+            _tasks.Clear();
             UpdateTime();
         }
     }
