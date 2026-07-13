@@ -97,17 +97,17 @@ namespace PersonalOrganizer.Domain.Entities
                 throw new ArgumentNullException(nameof(subTask));
             }
 
+            if (subTask == this)
+            {
+                throw new InvalidOperationException("Задача не может быть своей собственной подзадачей.");
+            }
+
             foreach (ToDo currentToDo in _subTasks)
             {
                 if (currentToDo == subTask)
                 {
                     return;
                 }
-            }
-
-            if (subTask == this)
-            {
-                throw new InvalidOperationException("Задача не может быть своей собственной подзадачей.");
             }
 
             _subTasks.Add(subTask);
@@ -134,7 +134,7 @@ namespace PersonalOrganizer.Domain.Entities
 
         public void ClearSubTasks()
         {
-            if (_subTasks.Count() == 0)
+            if (_subTasks.Count == 0)
             {
                 return;
             }
