@@ -2,5 +2,7 @@
   <Folder Name="/Элементы решения/">
     <File Path=".gitignore" />
   </Folder>
+  <Project Path="PersonalOrganizer.API/PersonalOrganizer.API.csproj" Id="3637fc75-3d33-4fcc-875f-2820f56b6ede" />
   <Project Path="PersonalOrganizer.Domain/PersonalOrganizer.Domain.csproj" />
+  <Project Path="PersonalOrganizer.Infrastructure/PersonalOrganizer.Infrastructure.csproj" Id="c62fef6b-7abb-47b5-9710-ad45bb1cd7ac" />
 </Solution>

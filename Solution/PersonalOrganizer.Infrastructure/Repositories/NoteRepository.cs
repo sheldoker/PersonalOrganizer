@@ -1,7 +1,6 @@
 ﻿using PersonalOrganizer.Domain.Entities;
 using PersonalOrganizer.Domain.Repositories;
 using PersonalOrganizer.Infrastructure.Persistence;
-using SQLitePCL;
 using Microsoft.EntityFrameworkCore;
 
 namespace PersonalOrganizer.Infrastructure.Repositories
@@ -29,12 +28,20 @@ namespace PersonalOrganizer.Infrastructure.Repositories
 
         public async Task<IReadOnlyCollection<Note>> GetAllAsync()
         {
-            return await _context.Notes.ToListAsync();
+            return await _context.Notes
+                .Include(n => n.Category)
+                .Include(n => n.Tags)
+                .Include(n => n.Tasks)
+                .ToListAsync();
         }
 
         public async Task<Note?> GetByIdAsync(int id)
         {
-            return await _context.Notes.FindAsync(id);
+            return await _context.Notes
+                .Include(n => n.Category)
+                .Include(n => n.Tags)
+                .Include(n => n.Tasks)
+                .FirstOrDefaultAsync(n => n.Id == id);
         }
 
         public async Task UpdateAsync(Note note)

@@ -10,15 +10,17 @@ namespace PersonalOrganizer.Domain.Entities
         private readonly List<ToDo> _tasks = new();
         public IReadOnlyCollection<ToDo> Tasks => _tasks.AsReadOnly();
 
-        public int Id { get; private set; }
-        public string Title { get; private set; }
-        public string Text { get; private set; }
-        public DateTime CreatedAt { get; private set; }
-        public DateTime UpdatedAt { get; private set; }
-        public bool IsFavorite { get; private set; }
-        public bool IsPinned { get; private set; }
-        public bool IsArchived { get; private set; }
-        public Category Category { get; private set; }
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public string Text { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
+        public bool IsFavorite { get; set; }
+        public bool IsPinned { get; set; }
+        public bool IsArchived { get; set; }
+        public Category Category { get; set; } = null;
+        public int CategoryId { get; set; }
+        public Note() { }
 
         public Note(string title, string text, Category category)
         {

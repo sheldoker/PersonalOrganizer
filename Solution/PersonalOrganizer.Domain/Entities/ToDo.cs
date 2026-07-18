@@ -17,6 +17,7 @@ namespace PersonalOrganizer.Domain.Entities
         public DateTime CreatedAt { get; private set; }
         public DateTime UpdatedAt { get; private set; }
 
+        protected ToDo() { }
         public ToDo(string title)
         {
             if (string.IsNullOrWhiteSpace(title))
