@@ -9,10 +9,12 @@ namespace PersonalOrganizer.API.Controllers
     public class NotesController : ControllerBase
     {
         private readonly INoteRepository _noteRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public NotesController(INoteRepository noteRepository)
+        public NotesController(INoteRepository noteRepository, ICategoryRepository categoryRepository)
         {
             _noteRepository = noteRepository;
+            _categoryRepository = categoryRepository;
         }
 
         [HttpGet]
@@ -36,9 +38,14 @@ namespace PersonalOrganizer.API.Controllers
         [HttpPost]
         public async Task<ActionResult<Note>> Create([FromBody] CreateNoteDto dto)
         {
-            var tempCategory = new Category("Общее", "Описание по умолчанию", "gray", "default-icon");
+            var category = await _categoryRepository.GetByIdAsync(dto.CategoryId);
 
-            var note = new Note(dto.Title, dto.Text, tempCategory);
+            if (category == null)
+            {
+                return NotFound($"Категория с Id {dto.CategoryId} не найдена");
+            }
+
+            var note = new Note(dto.Title, dto.Text, category);
 
             await _noteRepository.AddAsync(note);
 
@@ -197,6 +204,7 @@ namespace PersonalOrganizer.API.Controllers
     {
         public string Title { get; set; } = null!;
         public string Text { get; set; } = null!;
+        public int CategoryId { get; set; }
     }
 
     public class UpdateNoteDto
